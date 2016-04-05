@@ -12,9 +12,9 @@ bs_objs=${bs_src:.cpp=.o}
 bs_lib = libboost_serialization.a
 	
 
-PBDIR = protobuf-2.6.0/src/google/protobuf/
+PBDIR = protobuf-2.6.0/src/
 CXX_STD = CXX11
-PKG_CPPFLAGS =-DROUT @PKG_CPPFLAGS@ -Iboost_serialization -IPBDIR
+PKG_CPPFLAGS =-DROUT @PKG_CPPFLAGS@ -Iboost_serialization -I${PBDIR}
 PKG_LIBS =${bs_lib} `${R_HOME}/bin/Rscript -e "flowCore:::LdFlags()"` `${R_HOME}/bin/Rscript -e "flowWorkspace:::LdFlags()"` @PKG_LIBS@ 
 
 
