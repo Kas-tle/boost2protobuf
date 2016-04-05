@@ -11,35 +11,24 @@ bs_src=${wildcard boost_serialization/*.cpp}
 bs_objs=${bs_src:.cpp=.o}
 bs_lib = libboost_serialization.a
 	
-	
-PBBUILD=@PBBUILD@
 
-#if bundled pb is used, set pb lib
-ifneq ($(PBBUILD),) 	
-pb_lib=libprotobuf.a
-PBBUILDDIR = $(PBBUILD)/src/google/protobuf/
-pb_objs=$(PBBUILDDIR).libs/*.o $(PBBUILDDIR)stubs/.libs/*.o $(PBBUILDDIR)io/.libs/*.o
-endif
-
+PBDIR = protobuf-2.6.0/src/google/protobuf/
 CXX_STD = CXX11
-PKG_CPPFLAGS =-DROUT @PKG_CPPFLAGS@ -Iboost_serialization
-PKG_LIBS =${bs_lib} ${pb_lib} `${R_HOME}/bin/Rscript -e "flowCore:::LdFlags()"` `${R_HOME}/bin/Rscript -e "flowWorkspace:::LdFlags()"` @PKG_LIBS@ 
+PKG_CPPFLAGS =-DROUT @PKG_CPPFLAGS@ -Iboost_serialization -IPBDIR
+PKG_LIBS =${bs_lib} `${R_HOME}/bin/Rscript -e "flowCore:::LdFlags()"` `${R_HOME}/bin/Rscript -e "flowWorkspace:::LdFlags()"` @PKG_LIBS@ 
 
 
 all: 	$(SHLIB) 
 
-$(SHLIB): $(OBJECTS) $(bs_lib) $(pb_lib)
+$(SHLIB): $(bs_lib)
 
 #archive bs objects
 $(bs_lib): $(bs_objs)
 		$(AR) rs $(bs_lib) ${bs_objs}
 
-#archive pb objects (only executed when pb_lib is set)
-$(pb_lib): $(pb_objs)
-		$(AR) rs $(pb_lib) ${pb_objs}
 		
 .PHONY: 	all clean 
 
 clean:
-		rm -f $(OBJECTS) $(bs_lib) $(bs_objs) $(pb_lib) $(SHLIB)
+		rm -f $(OBJECTS) $(bs_lib) $(bs_objs) $(SHLIB)
  
