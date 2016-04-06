@@ -116,7 +116,6 @@ private:
     BOOST_SERIALIZATION_SPLIT_MEMBER()
 public:
 	nodeProperties();
-	nodeProperties(const pb::nodeProperties & np_pb);
 	nodeProperties(const nodeProperties& np);
 	nodeProperties & operator=(nodeProperties np);
 	~nodeProperties();

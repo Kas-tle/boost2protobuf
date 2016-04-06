@@ -53,8 +53,6 @@ public:
 	vector<double> spillOver;
 	void convertToPb(pb::COMP & comp_pb);
 	compensation(){};
-	void updateChannels(const CHANNEL_MAP & chnl_map);
-	compensation(const pb::COMP & comp_pb);
 private:
 template<class Archive>
 				void serialize(Archive &ar, const unsigned int version)
@@ -139,21 +137,6 @@ private:
 public:
 	 workspace(){doc=NULL;};
 	 virtual ~workspace();
-	 virtual string xPathSample(string sampleID)=0;
-	 virtual PARAM_VEC getTransFlag(wsSampleNode sampleNode)=0;
-	 virtual trans_local getTransformation(wsRootNode,const compensation &,PARAM_VEC &,trans_global_vec *,biexpTrans * _globalBiExpTrans,linTrans * _globalLinTrans)=0;
-	 virtual compensation getCompensation(wsSampleNode)=0;
-	 virtual trans_global_vec getGlobalTrans()=0;
-	 virtual vector <string> getSampleID(unsigned short)=0;
-	 virtual string getSampleName(wsSampleNode &)=0;
-	 virtual wsRootNode getRoot(wsSampleNode sampleNode)=0;
-	 virtual wsPopNodeSet getSubPop(wsNode *)=0;
-	 virtual gate * getGate(wsPopNode &)=0;//gate is dynamically allocated within this function,it is currently freed within gate pointer owner object nodeProperties
-	 virtual void to_popNode(wsRootNode &, nodeProperties &)=0;
-	 virtual void to_popNode(wsPopNode &,nodeProperties &,bool isGating)=0;
-	 valarray<double> toArray(string sCalTable);
-	 virtual void parseVersionList(){};
-
 
 };
 BOOST_CLASS_VERSION(workspace,2)

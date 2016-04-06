@@ -151,7 +151,6 @@ public:
 	double getMax(){return max;};
 	void setMax(double _v){max=_v;};
 	void convertToPb(pb::paramRange & paramRange_pb){paramRange_pb.set_name(name);paramRange_pb.set_max(max);paramRange_pb.set_min(min);};
-	paramRange(const pb::paramRange & paramRange_pb):name(paramRange_pb.name()),min(paramRange_pb.min()),max(paramRange_pb.max()){};
 };
 class paramPoly
 {
@@ -199,14 +198,7 @@ public:
 			it.convertToPb(*coor_pb);
 		}
 	};
-	paramPoly(const pb::paramPoly & paramPoly_pb){
-		for(int i = 0; i < paramPoly_pb.params_size(); i++){
-			params.push_back(paramPoly_pb.params(i));
-		}
-		for(int i = 0; i < paramPoly_pb.vertices_size(); i++){
-			vertices.push_back(coordinate(paramPoly_pb.vertices(i)));
-		}
-	};
+
 };
 
 
@@ -230,16 +222,6 @@ protected:
 	bool isGained;
 private:
 	template<class Archive>
-			void save(Archive &ar, const unsigned int version) const
-			{
-
-				ar & BOOST_SERIALIZATION_NVP(neg);
-				ar & BOOST_SERIALIZATION_NVP(isTransformed);
-				if(version>0)
-					ar & BOOST_SERIALIZATION_NVP(isGained);
-
-			}
-	template<class Archive>
 			void load(Archive &ar, const unsigned int version)
 			{
 
@@ -262,18 +244,12 @@ public:
 	 * about the gate type. The reason we are doing it is a compromise to the needs of R API getGate
 	 */
 	gate ();
-	gate(const pb::gate & gate_pb);
 	virtual void convertToPb(pb::gate & gate_pb);
 	virtual ~gate(){};
 	virtual unsigned short getType()=0;
 	virtual vector<BOOL_GATE_OP> getBoolSpec(){throw(domain_error("undefined getBoolSpec function!"));};
-	virtual vector<bool> gating(flowData &){throw(domain_error("undefined gating function!"));};
-	virtual void extend(flowData &,float){throw(domain_error("undefined extend function!"));};
-	virtual void extend(float,float){throw(domain_error("undefined extend function!"));};
-	virtual void gain(map<string,float> &){throw(domain_error("undefined gain function!"));};
 	virtual vector<string> getParamNames(){throw(domain_error("undefined getParam function!"));};
 	virtual vertices_valarray getVertices(){throw(domain_error("undefined getVertices function!"));};
-	virtual void transforming(trans_local &){throw(domain_error("undefined transforming function!"));};
 	virtual void updateChannels(const CHANNEL_MAP & chnl_map){throw(domain_error("undefined updateChannels function!"));};
 	virtual gate * clone()=0;
 	virtual bool isNegate(){return neg;};
@@ -299,10 +275,6 @@ private:
 public:
 	rangeGate();
 	unsigned short getType(){return RANGEGATE;}
-	vector<bool> gating(flowData &);
-	void extend(flowData &,float);
-	void extend(float,float);
-	void gain(map<string,float> &);
 	void transforming(trans_local &);
 	paramRange getParam(){return param;};
 	vector<string> getParamNames(){return param.getNameArray();};
@@ -311,7 +283,6 @@ public:
 	vertices_valarray getVertices(){return param.toValarray();};
 	rangeGate * clone(){return new rangeGate(*this);};
 	void convertToPb(pb::gate & gate_pb);
-	rangeGate(const pb::gate & gate_pb);
 };
 
 /*
@@ -333,12 +304,6 @@ private:
 public:
 	polygonGate();
 	virtual unsigned short getType(){return POLYGONGATE;}
-	virtual void extend(flowData &,float);
-	void extend(float,float);
-	virtual void gain(map<string,float> &);
-	virtual vector<bool> gating(flowData &);
-	virtual void transforming(trans_local &);
-	virtual void transforming(transformation * trans_x, transformation * trans_y);
 	virtual vertices_valarray getVertices(){return param.toValarray();};
 	void setParam(paramPoly _param){param=_param;};
 	void updateChannels(const CHANNEL_MAP & chnl_map){param.updateChannels(chnl_map);};
@@ -346,7 +311,6 @@ public:
 	virtual vector<string> getParamNames(){return param.getNameArray();};
 	virtual polygonGate * clone(){return new polygonGate(*this);};
 	void convertToPb(pb::gate & gate_pb);
-	polygonGate(const pb::gate & gate_pb);
 };
 /*
  * rectgate is a special polygon requires simpler gating routine
@@ -364,11 +328,9 @@ private:
 
 			}
 public:
-	vector<bool> gating(flowData &);
 	unsigned short getType(){return RECTGATE;}
 	rectGate * clone(){return new rectGate(*this);};
 	void convertToPb(pb::gate & gate_pb);
-	rectGate(const pb::gate & gate_pb);
 	rectGate():polygonGate(){};
 };
 /*
@@ -415,7 +377,6 @@ public:
 	ellipseGate(){dist = 1;};
 	ellipseGate(coordinate _mu, vector<coordinate> _cov, double _dist);
 	ellipseGate(vector<coordinate> _antipodal, vector<string> _params);
-	vector<bool> gating(flowData &);
 	vector<coordinate> getCovarianceMat(){
 		if(!Transformed())
 			throw(domain_error("EllipseGate has not been transformed so covariance matrix is unavailable!"));
@@ -430,13 +391,8 @@ public:
 		return dist;};
 	void computeCov();
 	virtual unsigned short getType(){return ELLIPSEGATE;}
-	void extend(flowData &,float);
-	void extend(float,float);
-	void gain(map<string,float> &);
-	virtual void transforming(trans_local &);
 	ellipseGate * clone(){return new ellipseGate(*this);};
 	void convertToPb(pb::gate & gate_pb);
-	ellipseGate(const pb::gate & gate_pb);
 	void toPolygon(unsigned nVertices);//ellipseGate doesn't need it , but ellipsoidGate will need it to handle the special scale (256)
 };
 BOOST_CLASS_VERSION(ellipseGate,1)
@@ -461,10 +417,8 @@ private:
 public:
 	ellipsoidGate():ellipseGate(){};
 	ellipsoidGate(vector<coordinate> _antipodal, vector<string> _params);
-	void transforming(trans_local &);
 	ellipsoidGate * clone(){return new ellipsoidGate(*this);};
 	void convertToPb(pb::gate & gate_pb);
-	ellipsoidGate(const pb::gate & gate_pb);
 	vector<bool> gating(flowData &);
 	unsigned short getType(){return POLYGONGATE;}//expose it to R as polygonGate since the original antipodal points can't be used directly anyway
 };
@@ -497,7 +451,6 @@ public:
 	unsigned short getType(){return BOOLGATE;}
 	boolGate * clone(){return new boolGate(*this);};
 	void convertToPb(pb::gate & gate_pb);
-	boolGate(const pb::gate & gate_pb);
 };
 /**
  * This is a dummby bool gate which is simply a side-effect of adding a node with logical indices yet
@@ -520,7 +473,6 @@ private:
 	logicalGate * clone(){return new logicalGate(*this);};
 	void convertToPb(pb::gate & gate_pb);
 public:
-	logicalGate(const pb::gate & gate_pb);
 	logicalGate():boolGate(){};
 };
 #endif /* GATE_HPP_ */

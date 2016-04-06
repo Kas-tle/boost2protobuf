@@ -12,69 +12,6 @@ nodeProperties::nodeProperties():thisGate(NULL),hidden(false){}
  * convert pb object to internal structure
  * @param np_pb
  */
-nodeProperties::nodeProperties(const pb::nodeProperties & np_pb):thisGate(NULL),hidden(false){
-	thisName = np_pb.thisname();
-	hidden = np_pb.hidden();
-	for(int i = 0; i < np_pb.fcstats_size(); i++){
-	   const pb::POPSTATS &	stat_pb = np_pb.fcstats(i);
-	   fcStats[stat_pb.stattype()] = stat_pb.statval();
-	}
-	for(int i = 0; i < np_pb.fjstats_size(); i++){
-	   const pb::POPSTATS & stat_pb = np_pb.fjstats(i);
-	   fjStats[stat_pb.stattype()] = stat_pb.statval();
-	}
-	if(np_pb.has_indices()){
-		const pb::POPINDICES & ind_pb = np_pb.indices();
-		switch(ind_pb.indtype()){
-		case pb::BOOL:
-			indices.reset(new BOOLINDICES(ind_pb));
-			break;
-		case pb::INT:
-			indices.reset(new INTINDICES(ind_pb));
-			break;
-		case pb::ROOT:
-			indices.reset(new ROOTINDICES(ind_pb));
-			break;
-		default:
-			throw(domain_error("unknown type of event indices archive!"));
-		}
-	}
-
-	/*
-	 * parse gate
-	 */
-	if(np_pb.has_thisgate()){
-		const pb::gate & gate_pb = np_pb.thisgate();
-		switch(gate_pb.type())
-		{
-		case pb::RANGE_GATE:
-			thisGate = new rangeGate(gate_pb);
-			break;
-		case pb::BOOL_GATE:
-			thisGate = new boolGate(gate_pb);
-			break;
-		case pb::POLYGON_GATE:
-			thisGate = new polygonGate(gate_pb);
-			break;
-		case pb::RECT_GATE:
-			thisGate = new rectGate(gate_pb);
-			break;
-		case pb::ELLIPSE_GATE:
-			thisGate = new ellipseGate(gate_pb);
-			break;
-		case pb::ELLIPSOID_GATE:
-			thisGate = new ellipsoidGate(gate_pb);
-			break;
-		case pb::LOGICAL_GATE:
-			thisGate = new logicalGate(gate_pb);
-			break;
-		default:
-			throw(domain_error("unknown type of gate archive!"));
-		}
-
-	}
-}
-
 
 void nodeProperties::convertToPb(pb::nodeProperties & np_pb, bool isRoot){
 

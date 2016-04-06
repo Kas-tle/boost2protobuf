@@ -10,8 +10,7 @@
 #ifndef GATINGSET_HPP_
 #define GATINGSET_HPP_
 #include "GatingHierarchy.hpp"
-#include "macFlowJoWorkspace.hpp"
-#include "winFlowJoWorkspace.hpp"
+#include "workspace.hpp"
 #include <string>
 #include <map>
 
@@ -95,26 +94,8 @@ private:
 	void freeWorkspace();//this is private because it is not supposed to be called anywhere other than destructor
 public:
 	~GatingSet();
-	GatingSet(){wsPtr=NULL;};
-	void setSample(string oldName, string newName);
-	GatingSet(string,bool,unsigned short,int,unsigned short wsType);
-	GatingSet(GatingHierarchy *,vector<string>);
-	GatingSet(vector<string>);
 	GatingSet(string filename, unsigned short format, bool archiveType);
-	GatingHierarchy * getGatingHierarchy(string );
-	GatingHierarchy * getGatingHierarchy(unsigned int);
-	void gating();
-	void parseWorkspace(unsigned short,bool, StringVec sampleNames);
-	void parseWorkspace(vector<string>,bool, StringVec sampleNames);
-	vector<string> getSamples(void);
-
-	GatingSet * clone_treeOnly(vector<string> samples);
-	void serialize_bs(string filename, unsigned short format);
 	void serialize_pb(string filename);
-	void add(GatingSet & gs,vector<string> sampleNames);
-	void addTransMap(string gName,trans_map tm);
-	void convertToPb(pb::GatingSet & gs_pb,string path);
-	void updateChannels(const CHANNEL_MAP & chnl_map);
 
 };
 

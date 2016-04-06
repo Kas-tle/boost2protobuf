@@ -64,29 +64,7 @@ private:
 
 		    }
 public:
-	flowData & operator=(const flowData& source);//explicitly define the copy assignment since the default one is compiler-specific
-	flowData();
-	flowData(const double* mat,vector<string>,unsigned _nEvents,unsigned _sampleID, bool _ignore_case = false);
-#ifdef ROUT
-	flowData(NumericMatrix mat,unsigned _sampleID, bool _ignore_case=false);
-#endif
-	slice getSlice(string channel);
-	void updateSlice(string channel,valarray<double> x);
-	valarray<double> subset(string channel);
-	/*
-	 * accessors
-	 */
-	void setParams(vector<string> _params);
-	vector<string> getParams(){return params;};
-	void setEventCount(unsigned _nEvents){nEvents=_nEvents;};
-	unsigned getEventsCount(){return nEvents;};
-	void setSampleID(unsigned _sampleID){sampleID=_sampleID;};
-	unsigned getSampleID(){return sampleID;};
 
-	void clear(){data.resize(0);};
-	unsigned dataSize(){return data.size();};
-	void getData(double * mat,unsigned nSize);
-	valarray<double> getData();
 };
 
 
