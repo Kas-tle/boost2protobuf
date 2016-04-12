@@ -142,6 +142,7 @@ load_gs<-function(path){
 }
 
 #' @rdname save_gs
+#' @importFrom flowWorkspace lapply
 save_gslist<-function(gslist,path,...){
   
   if(!file.exists(path))
