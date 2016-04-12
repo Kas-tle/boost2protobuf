@@ -2,10 +2,10 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 .cpp_saveGatingSet <- function(gs, fileName, format, isPB) {
-    invisible(.Call('GatingSetLoader_saveGatingSet', PACKAGE = 'GatingSetLoader', gs, fileName, format, isPB))
+    invisible(.Call('boost2protobuf_saveGatingSet', PACKAGE = 'boost2protobuf', gs, fileName, format, isPB))
 }
 
 .cpp_loadGatingSet <- function(fileName, format, isPB) {
-    .Call('GatingSetLoader_loadGatingSet', PACKAGE = 'GatingSetLoader', fileName, format, isPB)
+    .Call('boost2protobuf_loadGatingSet', PACKAGE = 'boost2protobuf', fileName, format, isPB)
 }
 

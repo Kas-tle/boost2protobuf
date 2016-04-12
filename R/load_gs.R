@@ -1,7 +1,7 @@
 #' @rdname load_gs
 #' @importClassesFrom flowWorkspace GatingSetList
 #' @importFrom flowWorkspace GatingSetList
-#' @useDynLib GatingSetLoader
+#' @useDynLib boost2protobuf
 load_gslist<-function(path){
 #  browser()
   path <- normalizePath(path,mustWork = TRUE)
@@ -30,9 +30,9 @@ load_gslist<-function(path){
 #'
 #' @examples
 #' \dontrun{
-#' 	gs <- GatingSetLoader:::load_gs(path="tempFolder")
+#' 	gs <- boost2protobuf:::load_gs(path="tempFolder")
 #'  # save it in pb format
-#' 	GatingSetLoader:::save_gs(gs,path="newFolder", cdf = "link)
+#' 	boost2protobuf:::save_gs(gs,path="newFolder", cdf = "link)
 #' }
 #' @rdname load_gs
 #' @aliases load_gslist
@@ -194,8 +194,8 @@ save_gslist<-function(gslist,path,...){
 #'
 #' @examples
 #' \dontrun{
-#' 	gs<- GatingSetLoader:::load_gs(bsFolder)
-#'  GatingSetLoader:::save_gs(pbFolder)
+#' 	gs<- boost2protobuf:::load_gs(bsFolder)
+#'  boost2protobuf:::save_gs(pbFolder)
 #'
 #' }
 #' @rdname save_gs

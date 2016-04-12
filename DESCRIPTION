@@ -1,11 +1,11 @@
-Package: GatingSetLoader
+Package: boost2protobuf
 Type: Package
-Title: Load the GatingSet saved in Boost serialization format
+Title: Convert the GatingSet from Boost serialization to protocol buffer format
 Version: 1.0.0
 Date: 2016-03-10
 Author: Mike Jiang
 Maintainer: Mike Jiang <wjiang2@fhcrc.org>
-Description: This package is designed to load the GatingSet that was previously saved in legacy Boost serialization format
+Description: This package is designed to convert the GatingSet that was previously saved in legacy Boost serialization format
 License: Artistic-2.0
 LazyLoad: yes
 Imports: flowWorkspace (>= 3.17.38)

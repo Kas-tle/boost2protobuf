@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.65])
-AC_INIT([GatingSetLoader], [1.0.0], [wjiang2@fhcrc.org])
+AC_INIT([boost2protobuf], [1.0.0], [wjiang2@fhcrc.org])
 AC_CONFIG_SRCDIR([src/GatingHierarchy.cpp])
 #AC_CONFIG_HEADERS([config.h])
 AC_ARG_WITH(xml2,
@@ -71,7 +71,7 @@ fi
 PKG_LIBS="$XML2_LIBS"
 
 # Checks for library functions.
-AC_MSG_NOTICE([Using the following compilation and linking flags for GatingSetLoader])
+AC_MSG_NOTICE([Using the following compilation and linking flags for boost2protobuf])
 AC_MSG_NOTICE([   PKG_CPPFLAGS=${PKG_CPPFLAGS}])
 AC_SUBST(PKG_CPPFLAGS)
 AC_MSG_NOTICE([   PKG_LIBS=${PKG_LIBS}])

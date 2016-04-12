@@ -1,39 +1,27 @@
-[![Build Status](https://travis-ci.org/RGLab/flowWorkspace.png?branch=trunk)](https://travis-ci.org/RGLab/flowWorkspace)
 
-# flowWorkspace: An infrastructure tool for the hierarchical gated flow cytometry data.     
+# boost2protobuf: An tool to convert the legacy GatingSet archive to protocol buffer format     
 
-This package is designed to store, query and visualize the hierarchical gated flow data.
-
-It also facilitates the comparison of automated gating methods against manual gating by 
-
-importing basic flowJo workspaces into R and replicate the gating from flowJo using the flowCore functionality. Gating hierarchies,
-
-groups of samples, compensation, and transformation are performed so that the output matches the flowJo analysis.
+This package facilitates `flowWorkspace` package to deal with the gated data that was archived in boost serialization format.
 
 ### INSTALLATION
 
 ```r
-# First, install it from bionconductor so that it will pull all the dependent packages automatically
-library(BiocInstalller)
-bicLite(flowWorkspace) # may be older
-# Then, install the latest version from github using devtools package 
 install.packages("devtools") 
 library(devtools) #load it
-install_github("flowWorkspace/RGLab", ref="trunk")
-
+install_github("boost2protobuf/RGLab", ref="master")
 ```
 
-### Import flowJo workspace
+### First, convert the old archive to pb format
 
 ```r
-library(flowWorkspace)
-dataDir <- system.file("extdata", package="flowWorkspaceData")
-wsfile <- list.files(dataDir, pattern="manual.xml",full=TRUE)
-ws <- openWorkspace(wsfile);
-gs <- parseWorkspace(ws, path = dataDir, name = 4, subset = "CytoTrol_CytoTrol_1.fcs")
-gs
+library(boost2protobuf)
+boost2protobuf(old_gs_path, new_gs_path)
+```
 
-#get the first sample
+### Then load it using flowWorkspace
+```r
+library(flowWorkspace)
+gs <- load_gs(new_gs_path)
 gh <- gs[[1]]
 #plot the hierarchy tree
 plot(gh)
@@ -43,9 +31,4 @@ getNodes(gh)
 getPopStats(gh)
 #plot the gates
 plotGate(gh) 
-
 ```
-### More examples:
-* [Importing flowJo Workspaces into R](http://bioconductor.org/packages/3.0/bioc/vignettes/flowWorkspace/inst/doc/flowWorkspace.pdf)
-* [How to plot gated data](http://bioconductor.org/packages/3.0/bioc/vignettes/flowWorkspace/inst/doc/plotGate.html)
-* [How to merge GatingSets](http://bioconductor.org/packages/3.0/bioc/vignettes/flowWorkspace/inst/doc/HowToMergeGatingSet.html)
