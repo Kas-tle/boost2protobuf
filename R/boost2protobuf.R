@@ -13,13 +13,13 @@ boost2protobuf <- function(from, to, ...){
   if(length(subdir) == 0){
     message("loading bs archive...")
     suppressMessages(gs <- load_gs(from))
-    message("saveing to pb archive...")
+    message("saving to pb archive...")
     suppressMessages(save_gs(gs, to, ...))
     message("GatingSet is now saved in pb format and can be loaded with 'load_gs'")
   }else{
     message("loading bs archive...")
     suppressMessages(gs <- load_gslist(from))
-    message("saveing to pb archive...")
+    message("saving to pb archive...")
     suppressMessages(save_gslist(gs, to, ...))
     message("GatingSetList is now saved in pb format and can be loaded with 'load_gslist'")
   }
