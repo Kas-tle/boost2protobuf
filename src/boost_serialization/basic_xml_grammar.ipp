@@ -454,13 +454,16 @@ void basic_xml_grammar<CharType>::init(IStream & is){
         );
 }
 
-bool basic_xml_grammar<CharType>::windup(IStream & is){
+template<class CharType>
+bool boost::archive::basic_xml_grammar<CharType>::windup(
+    typename boost::archive::basic_xml_grammar<CharType>::IStream & is
+){
     if(is.fail() || is.eof())
-        return false;  // return false if there is a failure or end of stream
+        return false;  // Return false if there is a failure or end of stream
 
-    // uh-oh - don't throw exception from code called by a destructor!
-    // so just ignore any failure.
-    return my_parse(is, ETag);  // return the result of my_parse
+    // Don't throw an exception from code called by a destructor!
+    // Just ignore any failure.
+    return my_parse(is, ETag);  // Return the result of my_parse
 }
 
 } // namespace archive
