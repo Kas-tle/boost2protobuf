@@ -207,7 +207,7 @@ void ellipseGate::computeCov(){
 void ellipseGate::toPolygon(unsigned nVertices){
 
 
-
+        const double PI = 3.14159265358979323846;
 
 	/*
 	 * using 4 vertices to fit polygon points
