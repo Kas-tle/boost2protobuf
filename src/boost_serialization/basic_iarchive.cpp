@@ -417,6 +417,8 @@ basic_iarchive_impl::load_pointer(
         const boost::serialization::extended_type_info & type_
     )
 ){
+    const class_id_type NULL_POINTER_TAG = static_cast<class_id_type>(-1);
+    
     m_moveable_objects.is_pointer = true;
     serialization::state_saver<bool> w(m_moveable_objects.is_pointer);
 
